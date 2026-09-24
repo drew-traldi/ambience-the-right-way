@@ -1,0 +1,104 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ambience — Focus Sound Mixer</title>
+<meta name="description" content="Mix rain, noise, ocean waves, campfire and more for focus or sleep, then save your soundscape as an audio file.">
+<meta property="og:title" content="Ambience">
+<meta property="og:description" content="Mix rain, noise, ocean waves, campfire and more for focus or sleep, then save your soundscape as an audio file.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://drew-traldi.github.io/ambience-the-right-way/">
+<meta name="twitter:card" content="summary">
+<meta name="author" content="Drew Traldi">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Ctext%20y%3D%27.9em%27%20font-size%3D%2790%27%3E%F0%9F%8C%A7%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:'Quicksand',sans-serif;color:#eaf0ff;background:#0e1424;overflow-x:hidden;padding:40px 18px}
+.aur{position:fixed;inset:-20%;background:radial-gradient(40% 30% at 20% 30%,rgba(80,120,255,.35),transparent),radial-gradient(35% 30% at 80% 20%,rgba(0,220,190,.25),transparent),radial-gradient(40% 35% at 60% 80%,rgba(190,90,255,.25),transparent);filter:blur(40px);animation:drift 30s ease-in-out infinite alternate;z-index:0}
+@keyframes drift{to{transform:translate(5%,-4%) rotate(8deg) scale(1.1)}}
+.w{position:relative;z-index:1;max-width:900px;margin:auto}
+h1{font-size:clamp(34px,6vw,56px);font-weight:700;letter-spacing:-1px}
+.sub{opacity:.7;margin-bottom:26px}
+.master{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:14px 20px;margin-bottom:22px;backdrop-filter:blur(10px);flex-wrap:wrap}
+.master button{width:54px;height:54px;border-radius:50%;border:0;background:#fff;color:#0e1424;font-size:20px;cursor:pointer}
+.master input{flex:1;min-width:120px;accent-color:#8ab4ff}
+.master select{background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:10px;padding:8px;font:600 14px 'Quicksand'}
+.master select option{background:#0e1424}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.s{border-radius:22px;padding:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:.25s;backdrop-filter:blur(8px);position:relative;overflow:hidden}
+.s.on{background:rgba(255,255,255,.12);border-color:var(--c);box-shadow:0 0 40px -10px var(--c)}
+.s .ic{font-size:38px;display:block;margin-bottom:8px;filter:grayscale(.6)}
+.s.on .ic{filter:none;animation:bob 3s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-4px)}}
+.s h3{font-size:17px}.s p{font-size:12px;opacity:.6;margin-bottom:10px}
+.s input{width:100%;accent-color:var(--c);opacity:.3;pointer-events:none}
+.s.on input{opacity:1;pointer-events:auto}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.presets button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:30px;padding:8px 14px;font:600 13px 'Quicksand';cursor:pointer}
+.rec{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:12px 18px;margin:-10px 0 22px;backdrop-filter:blur(10px);flex-wrap:wrap;font-size:14px}
+.rec select{background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:10px;padding:8px;font:600 14px 'Quicksand'}.rec select option{background:#0e1424}
+.rec .rb{background:#ff4d6d;color:#fff;border:0;border-radius:30px;padding:9px 16px;font:700 14px 'Quicksand';cursor:pointer;display:flex;align-items:center;gap:8px}
+.rec .rb i{width:10px;height:10px;border-radius:50%;background:#fff}.rec.on .rb i{animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.2}}
+.rec .rs{opacity:.8;font-variant-numeric:tabular-nums}.rec .note{opacity:.55;font-size:12px;flex-basis:100%}
+.presets .mine{border-style:dashed}.presets .mine b{margin-left:6px;opacity:.6;font-weight:700}.presets .sv{background:rgba(255,255,255,.18)}
+.timer{font-size:14px;opacity:.8}
+</style></head><body><div class="aur"></div>
+<div class="w"><h1>Ambience</h1><div class="sub">Layer generated soundscapes for focus, reading, or sleep. All sound is synthesized live in your browser.</div>
+<div class="master"><button id="pp">▶</button><span>Master</span><input type="range" id="mv" min="0" max="1" step=".01" value=".7"><select id="sleep"><option value="0">No timer</option><option value="15">Stop in 15m</option><option value="30">Stop in 30m</option><option value="60">Stop in 60m</option></select><span class="timer" id="tl"></span></div>
+<div class="rec" id="rec"><b>Save as audio</b><select id="rlen"><option value="0">Until I stop</option><option value="1">1 minute</option><option value="5" selected>5 minutes</option><option value="10">10 minutes</option><option value="30">30 minutes</option><option value="60">60 minutes</option></select><select id="rfmt"><option value="mr">Compressed (small file)</option><option value="wav">WAV (best quality, up to 10 min)</option></select><button class="rb" id="rb"><i></i><span>Record</span></button><span class="rs" id="rs"></span><div class="note">Recording happens in real time. Your current mix plays while it records, then the file downloads to your device automatically.</div></div>
+<div class="presets" id="presets"></div>
+<div class="grid" id="grid"></div></div>
+<script>
+const $=id=>document.getElementById(id);let ac,master,playing=false,endAt=0;
+const SND=[{k:'rain',n:'Rain',i:'🌧️',d:'Steady rainfall',c:'#6aa9ff'},{k:'brown',n:'Brown noise',i:'🟫',d:'Deep, warm rumble',c:'#c28b5a'},{k:'pink',n:'Pink noise',i:'🌸',d:'Balanced, soft hiss',c:'#ff8fc7'},{k:'white',n:'White noise',i:'⬜',d:'Masks conversation',c:'#ffffff'},{k:'wind',n:'Wind',i:'🌬️',d:'Gusting breeze',c:'#9ef0e0'},{k:'waves',n:'Ocean waves',i:'🌊',d:'Slow surf swells',c:'#34d5ff'},{k:'fire',n:'Campfire',i:'🔥',d:'Crackle & pop',c:'#ff9a3c'},{k:'drone',n:'Om drone',i:'🕉️',d:'Low harmonic hum',c:'#b88cff'},{k:'binaural',n:'Alpha beats',i:'🧠',d:'10Hz binaural (headphones)',c:'#7cff9e'}];
+const st={};SND.forEach(s=>st[s.k]={on:false,v:.5});
+function noiseBuf(type){const len=ac.sampleRate*4,b=ac.createBuffer(2,len,ac.sampleRate);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);let l=0,b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;
+ if(type==='white')d[i]=w*.5;else if(type==='brown'){l=(l+.02*w)/1.02;d[i]=l*3.5}else{b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926}}}return b}
+function src(type){const s=ac.createBufferSource();s.buffer=noiseBuf(type);s.loop=true;return s}
+function lfo(freq,amt,target,off){const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;g.gain.value=amt;o.connect(g).connect(target);o.start();if(off!==undefined)target.value=off;return o}
+function build(k){const out=ac.createGain();out.gain.value=0;out.connect(master);const n=[];
+ if(k==='white'||k==='pink'||k==='brown'){const s=src(k);s.connect(out);s.start();n.push(s)}
+ if(k==='rain'){const s=src('pink'),hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=800;const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=9000;s.connect(hp).connect(lp).connect(out);s.start();
+  const d=src('white'),bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=3000;bp.Q.value=.6;const dg=ac.createGain();dg.gain.value=.25;d.connect(bp).connect(dg).connect(out);d.start();lfo(7,.15,dg.gain);n.push(s,d)}
+ if(k==='wind'){const s=src('brown'),bp=ac.createBiquadFilter();bp.type='bandpass';bp.Q.value=2;bp.frequency.value=500;s.connect(bp).connect(out);s.start();lfo(.08,300,bp.frequency);const g2=ac.createGain();bp.disconnect();bp.connect(g2).connect(out);g2.gain.value=.8;lfo(.13,.5,g2.gain);n.push(s)}
+ if(k==='waves'){const s=src('pink'),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;const g2=ac.createGain();g2.gain.value=.5;s.connect(lp).connect(g2).connect(out);s.start();lfo(.1,.48,g2.gain);lfo(.1,500,lp.frequency);n.push(s)}
+ if(k==='fire'){const s=src('brown'),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=400;s.connect(lp).connect(out);s.start();n.push(s);
+  const crack=gen=>{if(gen!==out.gen)return;const t=ac.currentTime,b=ac.createBufferSource(),len=ac.sampleRate*.03|0,buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,4);b.buffer=buf;const hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=1500+Math.random()*3000;const g=ac.createGain();g.gain.value=Math.random()*.8;b.connect(hp).connect(g).connect(out);b.start(t);setTimeout(()=>crack(gen),40+Math.random()*350)};out.crack=crack;out.gen=0}
+ if(k==='drone'){[65.4,130.8,196,261.6].forEach((f,i)=>{const o=ac.createOscillator();o.type=i?'sine':'triangle';o.frequency.value=f;const g=ac.createGain();g.gain.value=.12/(i+1);o.connect(g).connect(out);o.start();lfo(.05+i*.03,.04/(i+1),g.gain);n.push(o)})}
+ if(k==='binaural'){const m=ac.createChannelMerger(2);[200,210].forEach((f,i)=>{const o=ac.createOscillator();o.frequency.value=f;const g=ac.createGain();g.gain.value=.15;o.connect(g).connect(m,0,i);o.start();n.push(o)});m.connect(out)}
+ return out}
+const nodes={};
+function ensure(){if(!ac){ac=new AudioContext();master=ac.createGain();master.gain.value=+$('mv').value;master.connect(ac.destination)}ac.resume()}
+function apply(k){ensure();if(!nodes[k])nodes[k]=build(k);const on=st[k].on&&playing;nodes[k].gain.setTargetAtTime(on?st[k].v:0,ac.currentTime,.4);if(nodes[k].crack){if(on&&!nodes[k].cracking){nodes[k].cracking=1;nodes[k].crack(++nodes[k].gen)}if(!on){nodes[k].cracking=0;nodes[k].gen++}}}
+function render(){$('grid').innerHTML=SND.map(s=>`<div class="s ${st[s.k].on?'on':''}" style="--c:${s.c}" data-k="${s.k}"><span class="ic">${s.i}</span><h3>${s.n}</h3><p>${s.d}</p><input type="range" min="0" max="1" step=".01" value="${st[s.k].v}"></div>`).join('');
+ document.querySelectorAll('.s').forEach(el=>{const k=el.dataset.k;el.onclick=e=>{if(e.target.tagName==='INPUT')return;st[k].on=!st[k].on;if(st[k].on&&!playing)setPlay(true);el.classList.toggle('on',st[k].on);apply(k);save()};el.querySelector('input').oninput=e=>{st[k].v=+e.target.value;apply(k);save()}})}
+function setPlay(p){playing=p;$('pp').textContent=p?'❚❚':'▶';SND.forEach(s=>{if(st[s.k].on||nodes[s.k])apply(s.k)})}
+const save=()=>localStorage.amb=JSON.stringify(st);try{Object.assign(st,JSON.parse(localStorage.amb||'{}'))}catch(e){}
+$('pp').onclick=()=>{if(!SND.some(s=>st[s.k].on)){st.rain.on=true;render()}setPlay(!playing)};$('mv').oninput=()=>{ensure();master.gain.value=+$('mv').value};
+const PR={'Rainy café':{rain:.6,brown:.2,fire:.3},'Deep focus':{brown:.6,binaural:.3},'Beach':{waves:.8,wind:.25},'Cabin night':{fire:.7,wind:.35,rain:.3},'Meditation':{drone:.6,waves:.2}};
+let MINE={};try{MINE=JSON.parse(localStorage.ambMine||'{}')}catch(e){}
+function applyMix(m){SND.forEach(s=>{st[s.k].on=s.k in m;if(st[s.k].on)st[s.k].v=m[s.k]});render();setPlay(true);save()}
+function presets(){$('presets').innerHTML=Object.keys(PR).map(p=>`<button data-p="${p}">${p}</button>`).join('')+Object.keys(MINE).map(p=>`<button class="mine" data-m="${p}">${p}<b data-x="${p}">✕</b></button>`).join('')+'<button class="sv" id="svmix">★ Save this mix</button>';
+ $('presets').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>applyMix(PR[b.dataset.p]));
+ $('presets').querySelectorAll('[data-m]').forEach(b=>b.onclick=e=>{if(e.target.dataset.x){delete MINE[e.target.dataset.x];localStorage.ambMine=JSON.stringify(MINE);presets();return}applyMix(MINE[b.dataset.m])});
+ $('svmix').onclick=()=>{const m={};SND.forEach(s=>{if(st[s.k].on)m[s.k]=st[s.k].v});if(!Object.keys(m).length)return;let i=1;while(MINE['My mix '+i])i++;MINE['My mix '+i]=m;try{localStorage.ambMine=JSON.stringify(MINE)}catch(e){}presets()}}
+presets();
+function makeRecorder(ac,src){let mode,mr,chunks,sp,dest,L,R,zero;
+ return{start(fmt){if(!window.MediaRecorder)fmt='wav';if(fmt==='wav'){L=[];R=[];sp=ac.createScriptProcessor(4096,2,2);zero=ac.createGain();zero.gain.value=0;sp.onaudioprocess=e=>{L.push(new Float32Array(e.inputBuffer.getChannelData(0)));R.push(new Float32Array(e.inputBuffer.getChannelData(1)))};src.connect(sp);sp.connect(zero).connect(ac.destination);mode='wav'}
+  else{dest=ac.createMediaStreamDestination();src.connect(dest);const t=['audio/webm;codecs=opus','audio/mp4','audio/webm','audio/ogg'].find(x=>window.MediaRecorder&&MediaRecorder.isTypeSupported(x));mr=new MediaRecorder(dest.stream,t?{mimeType:t}:{});chunks=[];mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mr.start(1000);mode='mr'}},
+ stop(){return new Promise(res=>{if(mode==='wav'){src.disconnect(sp);sp.disconnect();zero.disconnect();res({blob:toWav(L,R,ac.sampleRate),ext:'wav'})}
+  else{mr.onstop=()=>{src.disconnect(dest);const type=mr.mimeType||'audio/webm';res({blob:new Blob(chunks,{type}),ext:/mp4/.test(type)?'m4a':/ogg/.test(type)?'ogg':'webm'})};mr.stop()}})}}}
+function toWav(L,R,sr){const n=L.reduce((a,b)=>a+b.length,0),buf=new ArrayBuffer(44+n*4),v=new DataView(buf),w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+ w(0,'RIFF');v.setUint32(4,36+n*4,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,2,true);v.setUint32(24,sr,true);v.setUint32(28,sr*4,true);v.setUint16(32,4,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*4,true);
+ let o=44;for(let k=0;k<L.length;k++){const a=L[k],b=R[k];for(let i=0;i<a.length;i++){let s=Math.max(-1,Math.min(1,a[i]));v.setInt16(o,s<0?s*32768:s*32767,true);s=Math.max(-1,Math.min(1,b[i]));v.setInt16(o+2,s<0?s*32768:s*32767,true);o+=4}}return new Blob([buf],{type:'audio/wav'})}
+function saveBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+
+let recr=null,recT0=0,recTick=null;
+function mixName(){return SND.filter(s=>st[s.k].on).map(s=>s.k).join('-')||'mix'}
+async function recStop(){if(!recr)return;clearInterval(recTick);const r=recr;recr=null;$('rec').classList.remove('on');$('rb').querySelector('span').textContent='Record';$('rs').textContent='Saving…';
+ const {blob,ext}=await r.stop();const secs=Math.round((Date.now()-recT0)/1000);saveBlob(blob,`ambience-${mixName()}-${Math.floor(secs/60)}m${String(secs%60).padStart(2,'0')}s.${ext}`);$('rs').textContent=`Saved ✓ (${(blob.size/1048576).toFixed(1)} MB)`}
+$('rb').onclick=()=>{if(recr){recStop();return}if(!SND.some(s=>st[s.k].on)){st.rain.on=true;render()}if(!playing)setPlay(true);ensure();
+ const fmt=$('rfmt').value;let len=+$('rlen').value;if(fmt==='wav'&&(!len||len>10))len=10;
+ recr=makeRecorder(ac,master);recr.start(fmt);recT0=Date.now();$('rec').classList.add('on');$('rb').querySelector('span').textContent='Stop & save';
+ recTick=setInterval(()=>{const e=(Date.now()-recT0)/1000;$('rs').textContent=`● ${Math.floor(e/60)}:${String(Math.floor(e%60)).padStart(2,'0')}${len?' / '+len+':00':''}`;if(len&&e>=len*60)recStop()},250)};
+$('sleep').onchange=()=>{endAt=+$('sleep').value?Date.now()+$('sleep').value*60000:0};
+setInterval(()=>{if(!endAt){$('tl').textContent='';return}const l=endAt-Date.now();if(l<=0){endAt=0;$('sleep').value=0;setPlay(false);return}$('tl').textContent=Math.floor(l/60000)+':'+String(Math.floor(l/1000)%60).padStart(2,'0')},1000);
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();$('pp').click()}});render();
+</script></body></html>
