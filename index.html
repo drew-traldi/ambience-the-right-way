@@ -39,6 +39,8 @@ h1{font-size:clamp(34px,6vw,56px);font-weight:700;letter-spacing:-1px}
 .rec .rs{opacity:.8;font-variant-numeric:tabular-nums}.rec .note{opacity:.55;font-size:12px;flex-basis:100%}
 .presets .mine{border-style:dashed}.presets .mine b{margin-left:6px;opacity:.6;font-weight:700}.presets .sv{background:rgba(255,255,255,.18)}
 .timer{font-size:14px;opacity:.8}
+/* mobile: 16px fields stop iOS focus-zoom; roomier touch targets */
+@media (max-width:640px){input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]),select,textarea{font-size:16px!important}}
 </style></head><body><div class="aur"></div>
 <div class="w"><h1>Ambience</h1><div class="sub">Layer generated soundscapes for focus, reading, or sleep. All sound is synthesized live in your browser.</div>
 <div class="master"><button id="pp">▶</button><span>Master</span><input type="range" id="mv" min="0" max="1" step=".01" value=".7"><select id="sleep"><option value="0">No timer</option><option value="15">Stop in 15m</option><option value="30">Stop in 30m</option><option value="60">Stop in 60m</option></select><span class="timer" id="tl"></span></div>
